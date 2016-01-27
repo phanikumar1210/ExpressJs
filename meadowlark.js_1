@@ -1,0 +1,31 @@
+var express = require('express');
+var app = express();
+app.set('port', process.env.PORT || 3000);	//This allows us to override the port by setting an environment value before you start the server
+//custom 404 page
+app.use(function(req, res)
+{
+	res.type('text/plain');					//specifies the type of response
+	res.status(404);						//specifies the status if none specified will result in 200
+	res.write('404 -File Not Found write');
+	res.end();
+});
+// custom 500 page
+app.use(function(err, req, res, next)	//app.use is the method by which Express adds a middleware
+{
+	console.error(err.stack);
+	res.type('text/plain');
+	res.status(500);
+	res.send('500 - Server Error');
+});
+app.listen(app.get('port'), function()	//here it will assign the listening port to 3000 
+{
+	console.log( 'Express started on http://localhost:' +app.get('port') + '; press Ctrl-C to terminate.' );
+});
+
+/*
+Note:- res.write and res.send are both used to send response data except res.write will only write the data but doesn't end it
+on the other hand res.send will write the data and will end the response.
+
+app.use is the method by which Express adds middleware that will catch all the handler for anything that didn’t get matched by a
+route.
+*/

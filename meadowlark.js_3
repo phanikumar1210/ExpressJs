@@ -1,0 +1,53 @@
+var express = require('express');
+var app = express();
+app.set('port', process.env.PORT || 3000);	//This allows us to override the port by setting an environment value before you start the server
+
+
+
+
+
+/******************* Newly Added code********************/
+
+var handlebars = require('express3-handlebars').create({ defaultLayout:'main' });	//gets the handlebar modules and assigns it with a default layout called main
+app.engine('handlebars', handlebars.engine);			//assigns an engine to the app 
+app.set('view engine', 'handlebars');					// assign the view engine 
+
+/********************************************************/
+
+app.get('/', function(req, res)				//app.get is the method by which we’re adding routes
+{
+	res.type('text/plain');
+	res.send('Meadowlark Travel');
+});
+
+app.get('/about', function(req, res)		//app.get is the method by which we’re adding routes
+{
+	res.type('text/plain');
+	res.send('About Meadowlark Travel');
+});
+
+//custom 404 page
+app.use(function(req, res)
+{
+	res.type('text/plain');
+	res.status(404);
+	res.write('404 -File Not Found write');
+	res.end();
+});
+// custom 500 page
+app.use(function(err, req, res, next)
+{
+	console.error(err.stack);
+	res.type('text/plain');
+	res.status(500);
+	res.send('500 - Server Error');
+});
+app.listen(app.get('port'), function()	//here it will assign the listening port to 3000 
+{
+	console.log( 'Express started on http://localhost:' +app.get('port') + '; press Ctrl-C to terminate.' );
+});
+
+/*
+
+
+*/

@@ -1,0 +1,49 @@
+var express = require('express');
+var app = express();
+app.set('port', process.env.PORT || 3000);	//This allows us to override the port by setting an environment value before you start the server
+
+app.get('/', function(req, res)				//app.get is the method by which we’re adding routes
+{
+	res.type('text/plain');
+	res.send('Meadowlark Travel');
+});
+
+app.get('/about', function(req, res)		//app.get is the method by which we’re adding routes
+{
+	res.type('text/plain');
+	res.send('About Meadowlark Travel');
+});
+
+//custom 404 page
+app.use(function(req, res)
+{
+	res.type('text/plain');
+	res.status(404);
+	res.write('404 -File Not Found write');
+	res.end();
+});
+// custom 500 page
+app.use(function(err, req, res, next)
+{
+	console.error(err.stack);
+	res.type('text/plain');
+	res.status(500);
+	res.send('500 - Server Error');
+});
+app.listen(app.get('port'), function()	//here it will assign the listening port to 3000 
+{
+	console.log( 'Express started on http://localhost:' +app.get('port') + '; press Ctrl-C to terminate.' );
+});
+
+/*
+
+In general you might see a app.VERB in place of app.get or app.post which doesn't mean that VERB is a method 
+it is a placeholder for your lowercased http methods get,post,..
+
+app.get method takes 2 arguments the first one is the path and the second one is the function.
+
+The request won't consider the case which mean that /about, /About, /aboUT all are similar it evven won't consider the query string like /about?param1=value1&..
+
+***** If you specify app.use(function(req, res)) prior to routes this will result in page not found for every request so here order is also important.*****
+***** In node routes can also use wildcards in place of path *****
+*/

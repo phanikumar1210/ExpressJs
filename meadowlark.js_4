@@ -1,0 +1,47 @@
+var express = require('express');
+var app = express();
+app.set('port', process.env.PORT || 3000);	//This allows us to override the port by setting an environment value before you start the server
+
+
+
+
+
+
+
+var handlebars = require('express3-handlebars').create({ defaultLayout:'main' });	
+app.engine('handlebars', handlebars.engine);			 
+app.set('view engine', 'handlebars');					
+
+
+app.get('/', function(req, res)				
+{
+	res.render('home');					//changed code for routing		
+});
+
+app.get('/about', function(req, res)		
+{
+	res.render('about');			//changed code for routing
+});
+
+//custom 404 page
+app.use(function(req, res)
+{
+	res.status(404);
+	res.render('404');				//changed code for routing
+});
+// custom 500 page
+app.use(function(err, req, res, next)
+{
+	console.error(err.stack);
+	res.type('text/plain');
+	res.render('500');				//changed code for routing
+});
+app.listen(app.get('port'), function()	
+{
+	console.log( 'Express started on http://localhost:' +app.get('port') + '; press Ctrl-C to terminate.' );
+});
+
+/*
+
+
+*/
